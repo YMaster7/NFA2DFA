@@ -1,11 +1,31 @@
 from ruamel.yaml import YAML
-from fa import fa
+from fa import *
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    '-i', '--input', default='nfa.yml', help='input file (default: nfa.yml)'
+)
+parser.add_argument(
+    '-o', '--output', default='dfa.yml', help='output file (default: dfa.yml'
+)
+parser.add_argument(
+    '-r',
+    '--random',
+    action='store_true',
+    help='generate random NFA for input AND write to input file',
+)
+args = parser.parse_args()
 
 # load nfa
 yaml = YAML()
-with open('Input_NFA.yml') as f:
-    data = yaml.load(f)
-nfa = fa(**data)
+if args.random:
+    with open(args.input, 'w') as f:
+        nfa = random_fa()
+        yaml.dump(nfa.__dict__(), f)
+else:
+    with open(args.input, 'r') as f:
+        nfa = fa(**yaml.load(f))
 
 # convert nfa to dfa
 dfa = fa([], nfa.alphabet, nfa.start_state, [], dict())
@@ -47,5 +67,5 @@ while q:
         dfa.transitions.setdefault(current_state, dict())
         dfa.transitions[current_state][a] = next_state
 
-with open('Output_DFA.yml', 'w') as f:
+with open(args.output, 'w') as f:
     yaml.dump(dfa.__dict__(), f)
