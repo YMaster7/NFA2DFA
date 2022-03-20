@@ -7,7 +7,7 @@ parser.add_argument(
     '-i', '--input', default='nfa.yml', help='input file (default: nfa.yml)'
 )
 parser.add_argument(
-    '-o', '--output', default='dfa.yml', help='output file (default: dfa.yml'
+    '-o', '--output', default='dfa.yml', help='output file (default: dfa.yml)'
 )
 parser.add_argument(
     '-r',
