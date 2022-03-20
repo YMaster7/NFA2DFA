@@ -19,6 +19,7 @@ args = parser.parse_args()
 
 # load nfa
 yaml = YAML()
+yaml.default_flow_style = True
 if args.random:
     with open(args.input, 'w') as f:
         nfa = random_fa()
@@ -68,4 +69,8 @@ while q:
         dfa.transitions[current_state][a] = next_state
 
 with open(args.output, 'w') as f:
-    yaml.dump(dfa.__dict__(), f)
+    data = dfa.__dict__()
+    for k, v in new_states_dict.items():
+        new_states_dict[k] = list(v)
+    data['representation'] = new_states_dict
+    yaml.dump(data, f)
